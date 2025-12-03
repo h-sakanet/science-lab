@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ColorLesson } from './components/ColorLesson';
-import { Beaker, ArrowRight, Eye } from 'lucide-react';
+import { ArrowRight, Apple } from 'lucide-react';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<'home' | 'color_lesson'>('home');
@@ -14,10 +14,7 @@ function App() {
       {/* Header */}
       <header className="bg-white border-b border-slate-200 px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-            <Beaker className="w-6 h-6" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Science Lab</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">理科教室</h1>
         </div>
       </header>
 
@@ -34,13 +31,13 @@ function App() {
               <ArrowRight className="w-4 h-4" />
             </div>
 
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 mb-4 shadow-lg shadow-orange-100 flex items-center justify-center text-white">
-              <Eye className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-xl bg-red-50 mb-4 shadow-sm flex items-center justify-center text-red-500">
+              <Apple className="w-7 h-7 fill-current" />
             </div>
 
             <h3 className="text-lg font-bold text-slate-800 mb-2">色の見え方</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              光の反射と吸収、色のフィルター効果について学びます。
+              セロハンがある時に、色の見え方がどう変わるかを学びます。
             </p>
           </button>
 
