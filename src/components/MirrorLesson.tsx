@@ -108,7 +108,7 @@ const HumanDoubleMirrorView: React.FC = () => {
                     <div className="flex flex-col gap-4 flex-1">
                         {/* Top Mirror View */}
                         <div className={`flex-1 border rounded-xl p-2 relative flex items-center justify-center bg-slate-50 transition-all ${showTopImage ? 'opacity-100 border-indigo-200 ring-2 ring-indigo-100' : 'opacity-40 grayscale'}`}>
-                            <span className="absolute top-2 left-2 text-[10px] font-bold text-slate-500">左の像</span>
+                            <span className="absolute top-2 left-2 text-xs font-bold text-slate-500">左の像</span>
                             {showTopImage && (
                                 <div className="relative">
                                     <PersonStanding size={80} className="text-slate-800" />
@@ -119,7 +119,7 @@ const HumanDoubleMirrorView: React.FC = () => {
 
                         {/* Right Mirror View */}
                         <div className={`flex-1 border rounded-xl p-2 relative flex items-center justify-center bg-slate-50 transition-all ${showRightImage ? 'opacity-100 border-indigo-200 ring-2 ring-indigo-100' : 'opacity-40 grayscale'}`}>
-                            <span className="absolute top-2 left-2 text-[10px] font-bold text-slate-500">右の像</span>
+                            <span className="absolute top-2 left-2 text-xs font-bold text-slate-500">右の像</span>
                             {showRightImage && (
                                 <div className="relative">
                                     <PersonStanding size={80} className="text-slate-800" />
@@ -130,7 +130,7 @@ const HumanDoubleMirrorView: React.FC = () => {
 
                         {/* Center Mirror View */}
                         <div className={`flex-1 border rounded-xl p-2 relative flex items-center justify-center bg-slate-50 transition-all ${showCenterImage ? 'opacity-100 border-indigo-200 ring-2 ring-indigo-100' : 'opacity-40 grayscale'}`}>
-                            <span className="absolute top-2 left-2 text-[10px] font-bold text-slate-500">奥の像</span>
+                            <span className="absolute top-2 left-2 text-xs font-bold text-slate-500">奥の像</span>
                             {showCenterImage && (
                                 <div className="relative">
                                     <PersonStanding size={80} className="text-slate-800" />
@@ -166,10 +166,10 @@ const HumanDoubleMirrorView: React.FC = () => {
                     <line x1="400" y1="300" x2="650" y2="300" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4,4" />
 
                     {/* Mirrors */}
-                    <rect x="150" y="295" width="250" height="10" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="2" />
-                    <line x1="150" y1="295" x2="400" y2="295" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4,4" />
-                    <rect x="395" y="300" width="10" height="250" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="2" />
-                    <line x1="405" y1="300" x2="405" y2="550" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4,4" />
+                    <line x1="150" y1="300" x2="400" y2="300" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4,4" />
+                    <line x1="150" y1="300" x2="400" y2="300" stroke="#94a3b8" strokeWidth="4" />
+                    <line x1="400" y1="300" x2="400" y2="550" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4,4" />
+                    <line x1="400" y1="300" x2="400" y2="550" stroke="#94a3b8" strokeWidth="4" />
 
                     {/* Real Person */}
                     <g>
@@ -203,9 +203,9 @@ const HumanDoubleMirrorView: React.FC = () => {
                                 <Apple x={v1_right.x - 12} y={v1_right.y - 12} size={24} className="text-red-500 fill-current" />
                             </g>
                             {/* Rays: Apple -> Top -> Eye */}
-                            <line x1={rightHandPos.x} y1={rightHandPos.y} x2={topIntersection.x} y2={topIntersection.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
-                            <line x1={topIntersection.x} y1={topIntersection.y} x2={eyePos.x} y2={eyePos.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
-                            <line x1={v1_right.x} y1={v1_right.y} x2={topIntersection.x} y2={topIntersection.y} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5" />
+                            <line x1={rightHandPos.x} y1={rightHandPos.y} x2={topIntersection.x} y2={topIntersection.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
+                            <line x1={topIntersection.x} y1={topIntersection.y} x2={eyePos.x} y2={eyePos.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
+                            <line x1={v1_right.x} y1={v1_right.y} x2={topIntersection.x} y2={topIntersection.y} stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5" />
                         </>
                     )}
 
@@ -219,9 +219,9 @@ const HumanDoubleMirrorView: React.FC = () => {
                                 <Apple x={v2_right.x - 12} y={v2_right.y - 12} size={24} className="text-red-500 fill-current" />
                             </g>
                             {/* Rays: Apple -> Right -> Eye */}
-                            <line x1={rightHandPos.x} y1={rightHandPos.y} x2={rightIntersection.x} y2={rightIntersection.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
-                            <line x1={rightIntersection.x} y1={rightIntersection.y} x2={eyePos.x} y2={eyePos.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
-                            <line x1={v2_right.x} y1={v2_right.y} x2={rightIntersection.x} y2={rightIntersection.y} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5" />
+                            <line x1={rightHandPos.x} y1={rightHandPos.y} x2={rightIntersection.x} y2={rightIntersection.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
+                            <line x1={rightIntersection.x} y1={rightIntersection.y} x2={eyePos.x} y2={eyePos.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
+                            <line x1={v2_right.x} y1={v2_right.y} x2={rightIntersection.x} y2={rightIntersection.y} stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5" />
                         </>
                     )}
 
@@ -235,11 +235,11 @@ const HumanDoubleMirrorView: React.FC = () => {
                                 <Apple x={v3_right.x - 12} y={v3_right.y - 12} size={24} className="text-red-500 fill-current" />
                             </g>
                             {/* Rays: Apple -> P2 -> P1 -> Eye */}
-                            <line x1={rightHandPos.x} y1={rightHandPos.y} x2={center_p2.x} y2={center_p2.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
-                            <line x1={center_p2.x} y1={center_p2.y} x2={center_p1.x} y2={center_p1.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
-                            <line x1={center_p1.x} y1={center_p1.y} x2={eyePos.x} y2={eyePos.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
+                            <line x1={rightHandPos.x} y1={rightHandPos.y} x2={center_p2.x} y2={center_p2.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
+                            <line x1={center_p2.x} y1={center_p2.y} x2={center_p1.x} y2={center_p1.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
+                            <line x1={center_p1.x} y1={center_p1.y} x2={eyePos.x} y2={eyePos.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
                             {/* Helper: v3_right -> Eye (Direct) */}
-                            <line x1={v3_right.x} y1={v3_right.y} x2={eyePos.x} y2={eyePos.y} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3" />
+                            <line x1={v3_right.x} y1={v3_right.y} x2={eyePos.x} y2={eyePos.y} stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3" />
                         </>
                     )}
                 </svg>
@@ -409,42 +409,42 @@ const Human60DegreeMirrorView: React.FC = () => {
         return (
             <g>
                 {/* Virtual Ray (Dashed) */}
-                <line x1={targetApple.x} y1={targetApple.y} x2={p1.x} y2={p1.y} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5" />
+                <line x1={targetApple.x} y1={targetApple.y} x2={p1.x} y2={p1.y} stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5" />
 
                 {/* Real Path */}
                 {/* Eye -> P1 */}
-                <line x1={eye.x} y1={eye.y} x2={p1.x} y2={p1.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
+                <line x1={eye.x} y1={eye.y} x2={p1.x} y2={p1.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
 
                 {p2 ? (
                     <>
                         {/* P1 -> P2 */}
-                        <line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
+                        <line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
                         {p3 ? (
                             <>
                                 {/* P2 -> P3 */}
-                                <line x1={p2.x} y1={p2.y} x2={p3.x} y2={p3.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
+                                <line x1={p2.x} y1={p2.y} x2={p3.x} y2={p3.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
                                 {/* P3 -> Real Apple */}
-                                <line x1={p3.x} y1={p3.y} x2={realApple.x} y2={realApple.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
+                                <line x1={p3.x} y1={p3.y} x2={realApple.x} y2={realApple.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
                             </>
                         ) : (
                             /* P2 -> Real Apple */
-                            <line x1={p2.x} y1={p2.y} x2={realApple.x} y2={realApple.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
+                            <line x1={p2.x} y1={p2.y} x2={realApple.x} y2={realApple.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
                         )}
                     </>
                 ) : (
                     /* P1 -> Real Apple */
-                    <line x1={p1.x} y1={p1.y} x2={realApple.x} y2={realApple.y} stroke="#f59e0b" strokeWidth="2" opacity="0.8" />
+                    <line x1={p1.x} y1={p1.y} x2={realApple.x} y2={realApple.y} stroke="#ef4444" strokeWidth="2" opacity="0.8" />
                 )}
             </g>
         );
     };
 
     const toggles = [
-        { id: 1, angle: 120, label: '①', state: show1, setter: setShow1 },
-        { id: 2, angle: 60, label: '②', state: show2, setter: setShow2 },
-        { id: 3, angle: 0, label: '③', state: show3, setter: setShow3 },
-        { id: 4, angle: 300, label: '④', state: show4, setter: setShow4 },
-        { id: 5, angle: 240, label: '⑤', state: show5, setter: setShow5 },
+        { id: 1, angle: 120, label: '表示', state: show1, setter: setShow1 },
+        { id: 2, angle: 60, label: '表示', state: show2, setter: setShow2 },
+        { id: 3, angle: 0, label: '表示', state: show3, setter: setShow3 },
+        { id: 4, angle: 300, label: '表示', state: show4, setter: setShow4 },
+        { id: 5, angle: 240, label: '表示', state: show5, setter: setShow5 },
     ];
 
     return (
@@ -483,20 +483,14 @@ const Human60DegreeMirrorView: React.FC = () => {
                                 className="absolute pointer-events-auto transform -translate-x-1/2 -translate-y-1/2"
                                 style={{ left: `${left}%`, top: `${top}%` }}
                             >
-                                <label className={`
-                                    flex items-center justify-center w-16 h-16 rounded-full cursor-pointer shadow-md border-2 transition-all
-                                    ${t.state
-                                        ? 'bg-indigo-600 border-indigo-600 text-white'
-                                        : 'bg-white border-slate-200 text-slate-400 hover:border-indigo-300 hover:text-indigo-500'
-                                    }
-                                `}>
+                                <label className="flex items-center gap-2 cursor-pointer bg-white/90 backdrop-blur px-3 py-2 rounded-full shadow-sm border border-slate-200 hover:bg-white transition-colors whitespace-nowrap">
                                     <input
                                         type="checkbox"
                                         checked={t.state}
                                         onChange={(e) => t.setter(e.target.checked)}
-                                        className="hidden"
+                                        className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                                     />
-                                    <span className="text-2xl font-bold">{t.label}</span>
+                                    <span className="text-sm font-bold text-slate-700">{t.label}</span>
                                 </label>
                             </div>
                         );
@@ -548,7 +542,7 @@ type UnitId = 'apple_side' | 'apple_top' | 'apple_double_mirror' | 'human_mirror
 const UNITS = [
     { id: 'apple_side', title: '鏡にうつるりんご', subtitle: '横から見たら', icon: Apple },
     { id: 'apple_top', title: '鏡にうつるりんご', subtitle: '上から見たら', icon: Apple },
-    { id: 'apple_double_mirror', title: 'かがみにうつるりんご', subtitle: 'かがみが二つあると？', icon: Apple },
+    { id: 'apple_double_mirror', title: '鏡にうつるりんご', subtitle: '鏡が二つあると？', icon: Apple },
     { id: 'human_mirror', title: '鏡にうつる人間', subtitle: '左右が変わる？', icon: PersonStanding },
     { id: 'human_double_mirror', title: '鏡にうつる人間', subtitle: '鏡が二つあると？', icon: PersonStanding },
     { id: 'human_60_degree', title: '鏡にうつる人間', subtitle: '鏡の角度が変わると？', icon: PersonStanding },
@@ -755,12 +749,12 @@ const AppleDoubleMirrorView: React.FC = () => {
 
                 {/* Mirrors */}
                 {/* Mirror 1 (Top): Y=300, X=150~400 (Length 250) */}
-                <rect x="150" y="295" width="250" height="10" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="2" />
-                <line x1="150" y1="295" x2="400" y2="295" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4,4" /> {/* Back side */}
+                <line x1="150" y1="300" x2="400" y2="300" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4,4" />
+                <line x1="150" y1="300" x2="400" y2="300" stroke="#94a3b8" strokeWidth="4" />
 
                 {/* Mirror 2 (Right): X=400, Y=300~550 (Length 250) */}
-                <rect x="395" y="300" width="10" height="250" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="2" />
-                <line x1="405" y1="300" x2="405" y2="550" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4,4" /> {/* Back side */}
+                <line x1="400" y1="300" x2="400" y2="550" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4,4" />
+                <line x1="400" y1="300" x2="400" y2="550" stroke="#94a3b8" strokeWidth="4" />
 
                 {/* Person (Circle) */}
                 <g transform={`translate(${eyePos.x}, ${eyePos.y})`}>
@@ -774,18 +768,18 @@ const AppleDoubleMirrorView: React.FC = () => {
                         <line
                             x1={virtualApple1.x} y1={virtualApple1.y}
                             x2={topIntersection.x} y2={topIntersection.y}
-                            stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5"
+                            stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5"
                         />
                         {/* Real Rays (Solid) */}
                         <line
                             x1={applePos.x} y1={applePos.y}
                             x2={topIntersection.x} y2={topIntersection.y}
-                            stroke="#f59e0b" strokeWidth="2" opacity="0.8"
+                            stroke="#ef4444" strokeWidth="2" opacity="0.8"
                         />
                         <line
                             x1={topIntersection.x} y1={topIntersection.y}
                             x2={eyePos.x} y2={eyePos.y}
-                            stroke="#f59e0b" strokeWidth="2" opacity="0.8"
+                            stroke="#ef4444" strokeWidth="2" opacity="0.8"
                         />
                         {/* Virtual Apple */}
                         <g transform={`translate(${virtualApple1.x - 24}, ${virtualApple1.y - 24})`} opacity="0.5">
@@ -801,18 +795,18 @@ const AppleDoubleMirrorView: React.FC = () => {
                         <line
                             x1={virtualApple2.x} y1={virtualApple2.y}
                             x2={rightIntersection.x} y2={rightIntersection.y}
-                            stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5"
+                            stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5"
                         />
                         {/* Real Rays (Solid) */}
                         <line
                             x1={applePos.x} y1={applePos.y}
                             x2={rightIntersection.x} y2={rightIntersection.y}
-                            stroke="#f59e0b" strokeWidth="2" opacity="0.8"
+                            stroke="#ef4444" strokeWidth="2" opacity="0.8"
                         />
                         <line
                             x1={rightIntersection.x} y1={rightIntersection.y}
                             x2={eyePos.x} y2={eyePos.y}
-                            stroke="#f59e0b" strokeWidth="2" opacity="0.8"
+                            stroke="#ef4444" strokeWidth="2" opacity="0.8"
                         />
                         {/* Virtual Apple */}
                         <g transform={`translate(${virtualApple2.x - 24}, ${virtualApple2.y - 24})`} opacity="0.5">
@@ -828,7 +822,7 @@ const AppleDoubleMirrorView: React.FC = () => {
                         <line
                             x1={virtualApple3.x} y1={virtualApple3.y}
                             x2={eyePos.x} y2={eyePos.y}
-                            stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5"
+                            stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.5"
                         />
 
                         {/* Double Reflection Rays (Solid) */}
@@ -836,26 +830,26 @@ const AppleDoubleMirrorView: React.FC = () => {
                         <line
                             x1={applePos.x} y1={applePos.y}
                             x2={p2.x} y2={p2.y}
-                            stroke="#f59e0b" strokeWidth="2" opacity="0.8"
+                            stroke="#ef4444" strokeWidth="2" opacity="0.8"
                         />
                         {/* P2 -> P1 (Second Mirror) */}
                         <line
                             x1={p2.x} y1={p2.y}
                             x2={p1.x} y2={p1.y}
-                            stroke="#f59e0b" strokeWidth="2" opacity="0.8"
+                            stroke="#ef4444" strokeWidth="2" opacity="0.8"
                         />
                         {/* P1 -> Eye */}
                         <line
                             x1={p1.x} y1={p1.y}
                             x2={eyePos.x} y2={eyePos.y}
-                            stroke="#f59e0b" strokeWidth="2" opacity="0.8"
+                            stroke="#ef4444" strokeWidth="2" opacity="0.8"
                         />
 
                         {/* Helper Dashed Line: VirtualSource -> P1 (Shows where the ray from P1 seems to come from) */}
                         <line
                             x1={virtualSource.x} y1={virtualSource.y}
                             x2={p1.x} y2={p1.y}
-                            stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3"
+                            stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3"
                         />
 
                         {/* Virtual Apple */}
@@ -991,15 +985,14 @@ const AppleSideView: React.FC = () => {
                 <line x1="400" y1="150" x2="400" y2="500" stroke="#94a3b8" strokeWidth="4" />
 
                 {/* Eye (Person) */}
-                <g transform={`translate(${eyePos.x}, ${eyePos.y})`}>
-                    {/* Head */}
-                    <circle cx="0" cy="0" r="30" className="fill-slate-800" />
-                    {/* Body */}
-                    <path d="M -20 30 Q 0 60 20 30 V 190 H -20 Z" className="fill-slate-800" />
-                    {/* Eye */}
-                    <circle cx="12" cy="-5" r="4" fill="white" />
-                    <circle cx="14" cy="-5" r="2" fill="black" />
-                </g>
+                {/* Eye (Person) */}
+                <PersonStanding
+                    x={eyePos.x - 135}
+                    y={265}
+                    size={270}
+                    color="black"
+                    strokeWidth={1.2}
+                />
 
                 {/* Rays */}
                 {rays.map(ray => (
@@ -1027,7 +1020,6 @@ const AppleSideView: React.FC = () => {
                                 y2={ray.reflectionPoint.y}
                                 stroke="#ef4444" // Red
                                 strokeWidth="2"
-                                strokeDasharray="6,3"
                                 opacity="0.8"
                             />
                         )}
@@ -1172,12 +1164,12 @@ const AppleTopView: React.FC = () => {
                 onTouchEnd={handleMouseUp}
             >
                 {/* Mirror - Unified Style */}
-                <rect x="50" y={mirrorY - 5} width="700" height="10" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="2" />
-                <line x1="50" y1={mirrorY + 5} x2="750" y2={mirrorY + 5} stroke="#94a3b8" strokeWidth="2" />
+                <line x1="50" y1={mirrorY} x2="750" y2={mirrorY} stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4,4" />
+                <line x1="50" y1={mirrorY} x2="750" y2={mirrorY} stroke="#94a3b8" strokeWidth="4" />
 
                 {/* Eye (Top View) */}
                 <g transform={`translate(${eyePos.x}, ${eyePos.y})`}>
-                    <Eye size={48} className="text-slate-800" />
+                    <circle cx="0" cy="0" r="24" className="fill-slate-800" />
                 </g>
 
                 {/* Rays */}
@@ -1207,7 +1199,6 @@ const AppleTopView: React.FC = () => {
                                 y2={reflectionPoint.y}
                                 stroke="#ef4444" // Red
                                 strokeWidth="2"
-                                strokeDasharray="6,3"
                                 opacity="0.8"
                             />
                             {/* Reflected Ray */}
@@ -1388,7 +1379,6 @@ const HumanMirrorView: React.FC = () => {
                                 y2={ray.reflectionPoint.y}
                                 stroke="#ef4444" // Red
                                 strokeWidth="2"
-                                strokeDasharray="6,3"
                                 opacity="0.8"
                             />
                             {/* Reflected Ray (Mirror -> Eye) */}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ColorLesson } from './components/ColorLesson';
 import { MirrorLesson } from './components/MirrorLesson';
-import { ArrowRight, Apple, Flag } from 'lucide-react';
+import { ArrowRight, Apple, PersonStanding } from 'lucide-react';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<'home' | 'color_lesson' | 'mirror_lesson'>('home');
@@ -56,7 +56,7 @@ function App() {
             </div>
 
             <div className="w-12 h-12 rounded-xl bg-blue-50 mb-4 shadow-sm flex items-center justify-center text-blue-500">
-              <Flag className="w-7 h-7 fill-current" />
+              <PersonStanding className="w-7 h-7" />
             </div>
 
             <h3 className="text-lg font-bold text-slate-800 mb-2">鏡のふしぎ</h3>
