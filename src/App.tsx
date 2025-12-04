@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { ColorLesson } from './components/ColorLesson';
 import { MirrorLesson } from './components/MirrorLesson';
-import { ArrowRight, Apple, PersonStanding } from 'lucide-react';
+import { MysteriousCylinderLesson } from './components/MysteriousCylinderLesson';
+import { ArrowRight, Apple, PersonStanding, TreePine } from 'lucide-react';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'color_lesson' | 'mirror_lesson'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'color_lesson' | 'mirror_lesson' | 'mysterious_cylinder'>('home');
 
   if (currentScreen === 'color_lesson') {
     return <ColorLesson onBack={() => setCurrentScreen('home')} />;
@@ -12,6 +13,10 @@ function App() {
 
   if (currentScreen === 'mirror_lesson') {
     return <MirrorLesson onBack={() => setCurrentScreen('home')} />;
+  }
+
+  if (currentScreen === 'mysterious_cylinder') {
+    return <MysteriousCylinderLesson onBack={() => setCurrentScreen('home')} />;
   }
 
   return (
@@ -65,11 +70,24 @@ function App() {
             </p>
           </button>
 
-          {/* Placeholder Card */}
-          <div className="bg-slate-50 rounded-2xl p-6 border border-dashed border-slate-300 flex flex-col items-center justify-center text-center opacity-60">
-            <span className="text-sm font-medium text-slate-400">Coming Soon</span>
-            <p className="text-xs text-slate-400 mt-1">新しい実験を準備中...</p>
-          </div>
+          {/* Card: Mysterious Cylinder */}
+          <button
+            onClick={() => setCurrentScreen('mysterious_cylinder')}
+            className="group relative bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-200 transition-all text-left"
+          >
+            <div className="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+              <ArrowRight className="w-4 h-4" />
+            </div>
+
+            <div className="w-12 h-12 rounded-xl bg-green-50 mb-4 shadow-sm flex items-center justify-center text-green-600">
+              <TreePine className="w-7 h-7" />
+            </div>
+
+            <h3 className="text-lg font-bold text-slate-800 mb-2">ふしぎなつつ</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              つつをのぞくとどう見えるかを学びます。
+            </p>
+          </button>
 
         </div>
       </main>
