@@ -1,19 +1,67 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Star, TreePine, Eye } from 'lucide-react';
+import { ArrowLeft, Star, TreePine, Eye, RotateCcw } from 'lucide-react';
 
 interface MysteriousCylinderLessonProps {
     onBack: () => void;
 }
 
 export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> = ({ onBack }) => {
-    const [currentProblem, setCurrentProblem] = useState<number>(1);
-    const [topMirror, setTopMirror] = useState<'horizontal' | 'vertical' | 'back_slash' | 'slash' | null>(null);
-    const [bottomMirror, setBottomMirror] = useState<'horizontal' | 'vertical' | 'back_slash' | 'slash' | null>(null);
-    const [showStarLight, setShowStarLight] = useState(false);
-    const [showTreeLight, setShowTreeLight] = useState(false);
+    type MirrorType = 'horizontal' | 'vertical' | 'back_slash' | 'slash' | null;
 
-    const [showTopImage, setShowTopImage] = useState(false);
-    const [showBottomImage, setShowBottomImage] = useState(false);
+    interface ProblemState {
+        topMirror: MirrorType;
+        bottomMirror: MirrorType;
+        showStarLight: boolean;
+        showTreeLight: boolean;
+        showTopImage: boolean;
+        showBottomImage: boolean;
+    }
+
+    const [currentProblem, setCurrentProblem] = useState<number>(1);
+
+    const initialProblemState: ProblemState = {
+        topMirror: null,
+        bottomMirror: null,
+        showStarLight: false,
+        showTreeLight: false,
+        showTopImage: false,
+        showBottomImage: false
+    };
+
+    const [problemStates, setProblemStates] = useState<Record<number, ProblemState>>({
+        1: { ...initialProblemState },
+        2: { ...initialProblemState },
+        3: { ...initialProblemState },
+        4: { ...initialProblemState },
+        5: { ...initialProblemState },
+    });
+
+    const currentState = problemStates[currentProblem];
+    const { topMirror, bottomMirror, showStarLight, showTreeLight, showTopImage, showBottomImage } = currentState;
+
+    const updateState = (key: keyof ProblemState, value: any) => {
+        setProblemStates(prev => ({
+            ...prev,
+            [currentProblem]: {
+                ...prev[currentProblem],
+                [key]: value
+            }
+        }));
+    };
+
+    const setTopMirror = (val: MirrorType) => updateState('topMirror', val);
+    const setBottomMirror = (val: MirrorType) => updateState('bottomMirror', val);
+    const setShowStarLight = (val: boolean) => updateState('showStarLight', val);
+    const setShowTreeLight = (val: boolean) => updateState('showTreeLight', val);
+    const setShowTopImage = (val: boolean) => updateState('showTopImage', val);
+    const setShowBottomImage = (val: boolean) => updateState('showBottomImage', val);
+
+    const resetState = () => {
+        setProblemStates(prev => ({
+            ...prev,
+            [currentProblem]: { ...initialProblemState }
+        }));
+    };
 
     const problems = [1, 2, 3, 4, 5];
 
@@ -116,13 +164,15 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                 );
             } else if (dirX === 1) {
                 // Going Right
+                const limitX = currentProblem === 2 ? 420 : 260;
                 path.push(
-                    <line key="seg3" x1={currentX} y1={currentY} x2={260} y2={currentY} stroke={color} strokeWidth="2" />
+                    <line key="seg3" x1={currentX} y1={currentY} x2={limitX} y2={currentY} stroke={color} strokeWidth="2" />
                 );
             } else if (dirX === -1) {
                 // Going Left
+                const limitX = currentProblem === 2 ? 180 : 70;
                 path.push(
-                    <line key="seg3" x1={currentX} y1={currentY} x2={70} y2={currentY} stroke={color} strokeWidth="2" />
+                    <line key="seg3" x1={currentX} y1={currentY} x2={limitX} y2={currentY} stroke={color} strokeWidth="2" />
                 );
             }
         }
@@ -163,19 +213,19 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                 </div>
 
                 {/* Problem Area */}
-                {currentProblem === 1 ? (
+                {currentProblem === 1 || currentProblem === 2 ? (
                     <div className="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row">
 
                         {/* Left Panel: Side View */}
-                        <div className="flex-1 border-b md:border-b-0 md:border-r border-slate-200 p-6 flex flex-col bg-slate-50/50 rounded-t-xl md:rounded-l-xl md:rounded-tr-none">
+                        <div className="flex-1 md:flex-[1.5] border-b md:border-b-0 md:border-r border-slate-200 p-6 flex flex-col bg-slate-50/50 rounded-t-xl md:rounded-l-xl md:rounded-tr-none">
                             <p className="text-sm font-bold text-slate-600 text-center mb-4">横から見た様子</p>
                             <div className="flex-1 flex items-center justify-center relative py-12">
 
                                 {/* Drawing Container */}
-                                <div className="relative w-[280px] h-[300px]">
+                                <div className={`relative ${currentProblem === 2 ? 'w-[420px]' : 'w-[280px]'} h-[300px]`}>
 
                                     {/* Light Toggles */}
-                                    <div className="absolute top-[20px] -left-20 flex flex-col gap-2">
+                                    <div className="absolute top-[25px] -left-20 flex flex-col gap-2">
                                         <button
                                             onClick={() => setShowStarLight(!showStarLight)}
                                             className={`px-3 py-2 rounded-lg text-xs font-bold transition-all border ${showStarLight ? 'bg-yellow-100 border-yellow-400 text-yellow-700' : 'bg-white border-slate-200 text-slate-500'}`}
@@ -191,7 +241,7 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                                     </div>
 
                                     {/* Top Mirror Selection Panel */}
-                                    <div className="absolute -top-16 right-0 bg-white rounded-full shadow-md border border-slate-200 p-2 flex gap-2 z-20">
+                                    <div className={`absolute -top-16 ${currentProblem === 2 ? 'left-[10px]' : 'right-0'} bg-white rounded-full shadow-md border border-slate-200 p-2 flex gap-2 z-20`}>
                                         {/* None */}
                                         <button
                                             onClick={() => setTopMirror(null)}
@@ -233,7 +283,7 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                                     </div>
 
                                     {/* Bottom Mirror Selection Panel */}
-                                    <div className="absolute -bottom-16 right-0 bg-white rounded-full shadow-md border border-slate-200 p-2 flex gap-2 z-20">
+                                    <div className={`absolute -bottom-16 ${currentProblem === 2 ? 'left-[10px]' : 'right-0'} bg-white rounded-full shadow-md border border-slate-200 p-2 flex gap-2 z-20`}>
                                         {/* Triangle pointer (pointing up) */}
                                         <div className="absolute -top-2 right-12 w-4 h-4 bg-white border-t border-l border-slate-200 transform rotate-45"></div>
 
@@ -275,26 +325,41 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                                     </div>
 
                                     {/* Cylinder (Side View) */}
-                                    <svg width="100%" height="100%" viewBox="0 0 280 300" className="absolute top-0 left-0 pointer-events-none">
-                                        {/* Outer Line */}
-                                        <path
-                                            d="M 80,20 L 260,20 L 260,280 L 80,280"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            className="text-slate-400"
-                                        />
-                                        {/* Inner Line */}
-                                        <path
-                                            d="M 80,100 L 180,100 L 180,200 L 80,200"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            className="text-slate-400"
-                                        />
-                                        {/* Dashed lines for openings */}
-                                        <line x1="80" y1="20" x2="80" y2="100" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
-                                        <line x1="80" y1="200" x2="80" y2="280" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
+                                    <svg width="100%" height="100%" viewBox={currentProblem === 2 ? "0 0 450 300" : "0 0 280 300"} className="absolute top-0 left-0 pointer-events-none">
+                                        {currentProblem === 1 ? (
+                                            <>
+                                                {/* Problem 1: U-shape */}
+                                                <path
+                                                    d="M 80,20 L 260,20 L 260,280 L 80,280"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    className="text-slate-400"
+                                                />
+                                                <path
+                                                    d="M 80,100 L 180,100 L 180,200 L 80,200"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    className="text-slate-400"
+                                                />
+                                                {/* Dashed lines for openings */}
+                                                <line x1="80" y1="20" x2="80" y2="100" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
+                                                <line x1="80" y1="200" x2="80" y2="280" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
+                                            </>
+                                        ) : (
+                                            <>
+                                                {/* Problem 2: S-shape */}
+                                                {/* Upper Wall */}
+                                                <path d="M 80,20 L 260,20 L 260,200 L 420,200" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-400" />
+                                                {/* Lower Wall */}
+                                                <path d="M 80,100 L 180,100 L 180,280 L 420,280" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-400" />
+                                                {/* Openings */}
+                                                <line x1="80" y1="20" x2="80" y2="100" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
+                                                <line x1="420" y1="200" x2="420" y2="280" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
+                                            </>
+                                        )}
+
 
                                         {/* Light Rays */}
                                         {showStarLight && calculateRayPath(40, '#facc15')}
@@ -337,42 +402,63 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                                         </div>
                                     </div>
 
-                                    {/* Eye at Bottom Opening */}
-                                    <div className="absolute bottom-[20px] left-0 w-[70px] h-[80px] flex items-center justify-center">
-                                        <Eye className="w-8 h-8 text-slate-900" />
-                                    </div>
+                                    {/* Eye */}
+                                    {currentProblem === 1 ? (
+                                        <div className="absolute bottom-[20px] left-0 w-[70px] h-[80px] flex items-center justify-center">
+                                            <Eye className="w-8 h-8 text-slate-900" />
+                                        </div>
+                                    ) : (
+                                        <div className="absolute bottom-[20px] -right-10 w-[70px] h-[80px] flex items-center justify-center">
+                                            <Eye className="w-8 h-8 text-slate-900" />
+                                        </div>
+                                    )}
 
                                 </div>
                             </div>
                         </div>
 
-                        {/* Right Panel: Front View */}
-                        <div className="flex-1 p-6 flex flex-col bg-white rounded-b-xl md:rounded-r-xl md:rounded-bl-none">
-                            <p className="text-sm font-bold text-slate-600 text-center mb-4">正面から見た様子</p>
+                        {/* Right Panel: Front/Right View */}
+                        <div className="flex-1 p-6 flex flex-col bg-white rounded-b-xl md:rounded-r-xl md:rounded-bl-none relative">
+                            <button
+                                onClick={resetState}
+                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                                title="リセット"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+                            <p className="text-sm font-bold text-slate-600 text-center mb-4">
+                                {currentProblem === 1 ? '正面から見た様子' : '右から見た様子'}
+                            </p>
                             <div className="flex-1 flex items-center justify-center relative">
                                 <div className="relative w-[200px] h-[300px]">
                                     {/* Cylinder Body (Front View) */}
                                     <div className="absolute top-[20px] left-[50px] w-[100px] h-[260px] border-2 border-slate-400 bg-slate-50">
                                         {/* Lines indicating openings */}
-                                        <div className="absolute top-[80px] left-0 w-full border-t border-slate-400"></div>
+                                        {currentProblem === 1 && (
+                                            <div className="absolute top-[80px] left-0 w-full border-t border-slate-400"></div>
+                                        )}
                                         <div className="absolute top-[180px] left-0 w-full border-t border-slate-400"></div>
 
-                                        {/* Top Mirror (Front View) */}
-                                        {topMirror === 'horizontal' && (
-                                            <div className="absolute top-[10px] left-[10px] w-[80px] h-[4px] bg-slate-500"></div>
-                                        )}
-                                        {topMirror === 'vertical' && (
-                                            <div className="absolute top-[10px] left-[10px] w-[80px] h-[60px] bg-slate-100 border-4 border-slate-500"></div>
-                                        )}
-                                        {topMirror === 'back_slash' && (
-                                            <svg className="absolute top-[10px] left-[10px] w-[80px] h-[60px] overflow-visible">
-                                                <polygon points="0,0 80,0 76,60 4,60" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
-                                            </svg>
-                                        )}
-                                        {topMirror === 'slash' && (
-                                            <svg className="absolute top-[10px] left-[10px] w-[80px] h-[60px] overflow-visible">
-                                                <polygon points="4,0 76,0 80,60 0,60" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
-                                            </svg>
+                                        {/* Top Mirror (Front View) - Visible only for Problem 1 */}
+                                        {currentProblem === 1 && (
+                                            <>
+                                                {topMirror === 'horizontal' && (
+                                                    <div className="absolute top-[10px] left-[10px] w-[80px] h-[4px] bg-slate-500"></div>
+                                                )}
+                                                {topMirror === 'vertical' && (
+                                                    <div className="absolute top-[10px] left-[10px] w-[80px] h-[60px] bg-slate-100 border-4 border-slate-500"></div>
+                                                )}
+                                                {topMirror === 'back_slash' && (
+                                                    <svg className="absolute top-[10px] left-[10px] w-[80px] h-[60px] overflow-visible">
+                                                        <polygon points="0,0 80,0 76,60 4,60" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
+                                                    </svg>
+                                                )}
+                                                {topMirror === 'slash' && (
+                                                    <svg className="absolute top-[10px] left-[10px] w-[80px] h-[60px] overflow-visible">
+                                                        <polygon points="4,0 76,0 80,60 0,60" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
+                                                    </svg>
+                                                )}
+                                            </>
                                         )}
 
                                         {/* Bottom Mirror (Front View) */}
@@ -384,25 +470,37 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                                         )}
                                         {bottomMirror === 'back_slash' && (
                                             <svg className="absolute bottom-[10px] left-[10px] w-[80px] h-[60px] overflow-visible">
-                                                <polygon points="0,0 80,0 76,60 4,60" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
+                                                <polygon
+                                                    points={currentProblem === 2 ? "4,0 76,0 80,60 0,60" : "0,0 80,0 76,60 4,60"}
+                                                    fill="#f1f5f9"
+                                                    stroke="#64748b"
+                                                    strokeWidth="4"
+                                                />
                                             </svg>
                                         )}
                                         {bottomMirror === 'slash' && (
                                             <svg className="absolute bottom-[10px] left-[10px] w-[80px] h-[60px] overflow-visible">
-                                                <polygon points="4,0 76,0 80,60 0,60" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
+                                                <polygon
+                                                    points={currentProblem === 2 ? "0,0 80,0 76,60 4,60" : "4,0 76,0 80,60 0,60"}
+                                                    fill="#f1f5f9"
+                                                    stroke="#64748b"
+                                                    strokeWidth="4"
+                                                />
                                             </svg>
                                         )}
                                     </div>
 
                                     {/* Image Toggles */}
-                                    <div className="absolute top-[45px] left-[160px] flex flex-col gap-2">
-                                        <button
-                                            onClick={() => setShowTopImage(!showTopImage)}
-                                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border whitespace-nowrap ${showTopImage ? 'bg-green-100 border-green-400 text-green-700' : 'bg-white border-slate-200 text-slate-500'}`}
-                                        >
-                                            像を表示
-                                        </button>
-                                    </div>
+                                    {currentProblem === 1 && (
+                                        <div className="absolute top-[45px] left-[160px] flex flex-col gap-2">
+                                            <button
+                                                onClick={() => setShowTopImage(!showTopImage)}
+                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border whitespace-nowrap ${showTopImage ? 'bg-green-100 border-green-400 text-green-700' : 'bg-white border-slate-200 text-slate-500'}`}
+                                            >
+                                                像を表示
+                                            </button>
+                                        </div>
+                                    )}
                                     <div className="absolute top-[225px] left-[160px] flex flex-col gap-2">
                                         <button
                                             onClick={() => setShowBottomImage(!showBottomImage)}
@@ -412,8 +510,8 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                                         </button>
                                     </div>
 
-                                    {/* Object (Top View) - Visible for vertical and slash/back_slash mirrors AND showTopImage is true */}
-                                    {showTopImage && (topMirror === 'vertical' || topMirror === 'slash' || topMirror === 'back_slash') && (
+                                    {/* Object (Top View) - Visible for vertical and slash/back_slash mirrors AND showTopImage is true - ONLY for Problem 1 */}
+                                    {currentProblem === 1 && showTopImage && (topMirror === 'vertical' || topMirror === 'slash' || topMirror === 'back_slash') && (
                                         <div className="absolute top-[25px] left-[65px] w-[70px] h-[80px] flex flex-col items-center justify-center z-10">
                                             <div className="relative">
                                                 <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
@@ -422,14 +520,28 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                                         </div>
                                     )}
 
-                                    {/* Object (Bottom View) - Visible only when Top is back_slash and Bottom is slash AND showBottomImage is true */}
-                                    {showBottomImage && topMirror === 'back_slash' && bottomMirror === 'slash' && (
-                                        <div className="absolute top-[195px] left-[65px] w-[70px] h-[80px] flex flex-col items-center justify-center z-10">
-                                            <div className="relative rotate-180">
-                                                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
-                                                <TreePine className="w-12 h-12 text-green-600" />
-                                            </div>
-                                        </div>
+                                    {/* Object (Bottom View) */}
+                                    {showBottomImage && (
+                                        <>
+                                            {/* Problem 1: Top=\, Bottom=/ -> Inverted */}
+                                            {currentProblem === 1 && topMirror === 'back_slash' && bottomMirror === 'slash' && (
+                                                <div className="absolute top-[195px] left-[65px] w-[70px] h-[80px] flex flex-col items-center justify-center z-10">
+                                                    <div className="relative rotate-180">
+                                                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
+                                                        <TreePine className="w-12 h-12 text-green-600" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {/* Problem 2: Top=\, Bottom=\ -> Upright */}
+                                            {currentProblem === 2 && topMirror === 'back_slash' && bottomMirror === 'back_slash' && (
+                                                <div className="absolute top-[200px] left-[65px] w-[70px] h-[80px] flex flex-col items-center justify-center z-10">
+                                                    <div className="relative">
+                                                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
+                                                        <TreePine className="w-12 h-12 text-green-600" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             </div>
