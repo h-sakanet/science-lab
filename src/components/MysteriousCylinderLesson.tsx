@@ -44,7 +44,6 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
         2: { ...initialProblemState },
         3: { ...initialProblemState },
         4: { ...initialProblemState },
-        5: { ...initialProblemState },
     });
 
     const currentState = problemStates[currentProblem];
@@ -143,7 +142,7 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
         });
     };
 
-    const problems = [1, 2, 3, 4, 5];
+    const problems = [1, 2, 3, 4];
 
     // Calculate ray path
     const calculateRayPath = (startY: number, color: string, isRightPanel: boolean = false) => {
@@ -866,6 +865,16 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
 
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                ) : currentProblem === 4 ? (
+                    <div className="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center">
+                        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                            <img
+                                src="/images/problem4.png"
+                                alt="Problem 4 Challenge"
+                                className="max-w-full max-h-[65vh] object-contain"
+                            />
                         </div>
                     </div>
                 ) : (
