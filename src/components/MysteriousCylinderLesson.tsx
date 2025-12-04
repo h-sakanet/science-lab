@@ -15,6 +15,12 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
         showTreeLight: boolean;
         showTopImage: boolean;
         showBottomImage: boolean;
+        showMirrors: boolean;
+        // Problem 3 Right Panel States
+        showRightMirrors: boolean;
+        showRightStarLight: boolean;
+        showRightTreeLight: boolean;
+        showRightImage: boolean;
     }
 
     const [currentProblem, setCurrentProblem] = useState<number>(1);
@@ -25,7 +31,12 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
         showStarLight: false,
         showTreeLight: false,
         showTopImage: false,
-        showBottomImage: false
+        showBottomImage: false,
+        showMirrors: false,
+        showRightMirrors: false,
+        showRightStarLight: false,
+        showRightTreeLight: false,
+        showRightImage: false
     };
 
     const [problemStates, setProblemStates] = useState<Record<number, ProblemState>>({
@@ -37,7 +48,10 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
     });
 
     const currentState = problemStates[currentProblem];
-    const { topMirror, bottomMirror, showStarLight, showTreeLight, showTopImage, showBottomImage } = currentState;
+    const {
+        topMirror, bottomMirror, showStarLight, showTreeLight, showTopImage, showBottomImage, showMirrors,
+        showRightMirrors, showRightStarLight, showRightTreeLight, showRightImage
+    } = currentState;
 
     const updateState = (key: keyof ProblemState, value: any) => {
         setProblemStates(prev => ({
@@ -55,19 +69,125 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
     const setShowTreeLight = (val: boolean) => updateState('showTreeLight', val);
     const setShowTopImage = (val: boolean) => updateState('showTopImage', val);
     const setShowBottomImage = (val: boolean) => updateState('showBottomImage', val);
-
-    const resetState = () => {
+    const setShowMirrors = (val: boolean) => {
         setProblemStates(prev => ({
             ...prev,
-            [currentProblem]: { ...initialProblemState }
+            [currentProblem]: {
+                ...prev[currentProblem],
+                showMirrors: val,
+                showStarLight: val ? prev[currentProblem].showStarLight : false,
+                showTreeLight: val ? prev[currentProblem].showTreeLight : false
+            }
         }));
+    };
+
+    // Right Panel Setters
+    const setShowRightImage = (val: boolean) => updateState('showRightImage', val);
+    const setShowRightMirrors = (val: boolean) => {
+        setProblemStates(prev => ({
+            ...prev,
+            [currentProblem]: {
+                ...prev[currentProblem],
+                showRightMirrors: val,
+                showRightStarLight: val ? prev[currentProblem].showRightStarLight : false,
+                showRightTreeLight: val ? prev[currentProblem].showRightTreeLight : false
+            }
+        }));
+    };
+    const setShowRightStarLight = (val: boolean) => updateState('showRightStarLight', val);
+    const setShowRightTreeLight = (val: boolean) => updateState('showRightTreeLight', val);
+
+    const resetLeftPanel = () => {
+        setProblemStates(prev => {
+            const current = prev[currentProblem];
+            const updates: Partial<ProblemState> = {};
+
+            if (currentProblem === 3) {
+                updates.showMirrors = initialProblemState.showMirrors;
+                updates.showStarLight = initialProblemState.showStarLight;
+                updates.showTreeLight = initialProblemState.showTreeLight;
+                updates.showBottomImage = initialProblemState.showBottomImage;
+            } else {
+                updates.topMirror = initialProblemState.topMirror;
+                updates.bottomMirror = initialProblemState.bottomMirror;
+                updates.showStarLight = initialProblemState.showStarLight;
+                updates.showTreeLight = initialProblemState.showTreeLight;
+            }
+
+            return {
+                ...prev,
+                [currentProblem]: { ...current, ...updates }
+            };
+        });
+    };
+
+    const resetRightPanel = () => {
+        setProblemStates(prev => {
+            const current = prev[currentProblem];
+            const updates: Partial<ProblemState> = {};
+
+            if (currentProblem === 3) {
+                updates.showRightMirrors = initialProblemState.showRightMirrors;
+                updates.showRightStarLight = initialProblemState.showRightStarLight;
+                updates.showRightTreeLight = initialProblemState.showRightTreeLight;
+                updates.showRightImage = initialProblemState.showRightImage;
+            } else {
+                updates.showTopImage = initialProblemState.showTopImage;
+                updates.showBottomImage = initialProblemState.showBottomImage;
+            }
+
+            return {
+                ...prev,
+                [currentProblem]: { ...current, ...updates }
+            };
+        });
     };
 
     const problems = [1, 2, 3, 4, 5];
 
     // Calculate ray path
-    const calculateRayPath = (startY: number, color: string) => {
+    const calculateRayPath = (startY: number, color: string, isRightPanel: boolean = false) => {
         const path: React.ReactNode[] = [];
+
+        if (currentProblem === 3) {
+            if (isRightPanel) {
+                // Problem 3 Right Panel: Right -> Left -> Down -> Forward
+                const startX = 240;
+                // Mirror equation: line from (50,30) to (110,90) => y = -x + 140 => x = 140 - y
+                const reflectionX = 140 - startY;
+
+                // Segment 1: Right to Left (Mirror 1)
+                path.push(
+                    <line key="seg1" x1={startX} y1={startY} x2={reflectionX} y2={startY} stroke={color} strokeWidth="2" />
+                );
+
+                // Segment 2: Down (Mirror 2)
+                path.push(
+                    <line key="seg2" x1={reflectionX} y1={startY} x2={reflectionX} y2={240} stroke={color} strokeWidth="2" />
+                );
+
+                return path;
+            } else {
+                // Problem 3 Left Panel: Left -> Right -> Down -> Forward (Stop)
+                const startX = 60;
+                // Mirror equation: line from (190,30) to (250,90) => y = x - 160 => x = y + 160
+                const reflectionX = startY + 160;
+
+                // Segment 1: Left to Right (Mirror 1)
+                path.push(
+                    <line key="seg1" x1={startX} y1={startY} x2={reflectionX} y2={startY} stroke={color} strokeWidth="2" />
+                );
+
+                // Segment 2: Down (Mirror 2 at y=230)
+                path.push(
+                    <line key="seg2" x1={reflectionX} y1={startY} x2={reflectionX} y2={240} stroke={color} strokeWidth="2" />
+                );
+
+                return path;
+            }
+        }
+
+        // Problem 1 & 2 Logic
         let currentX = 70;
         let currentY = startY;
         let dirX = 1; // 1: right, -1: left, 0: none
@@ -139,10 +259,11 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                 bottomNextDirX = 1; // Reflect Right
                 bottomNextDirY = 0;
             } else if (bottomMirror === 'slash') {
-                // y = -x + 460
-                nextY = -currentX + 460;
+                // CORRECT LOGIC based on previous context:
+                // If bottomMirror is slash (/), and coming down:
+                // Reflects LEFT.
                 hitBottomMirror = true;
-                bottomNextDirX = -1; // Reflect Left
+                bottomNextDirX = -1;
                 bottomNextDirY = 0;
             }
 
@@ -152,6 +273,7 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
 
             if (!hitBottomMirror) return path;
 
+            currentX = currentX; // X stays same
             currentY = nextY;
             dirX = bottomNextDirX;
             dirY = bottomNextDirY;
@@ -420,7 +542,7 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                         {/* Right Panel: Front/Right View */}
                         <div className="flex-1 p-6 flex flex-col bg-white rounded-b-xl md:rounded-r-xl md:rounded-bl-none relative">
                             <button
-                                onClick={resetState}
+                                onClick={resetRightPanel}
                                 className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
                                 title="リセット"
                             >
@@ -547,6 +669,204 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                             </div>
                         </div>
 
+                    </div>
+                ) : currentProblem === 3 ? (
+                    <div className="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row">
+                        {/* Left Panel: Front View (Problem 3) */}
+                        <div className="flex-1 border-b md:border-b-0 md:border-r border-slate-200 p-6 flex flex-col bg-slate-50/50 rounded-t-xl md:rounded-l-xl md:rounded-tr-none relative">
+                            <button
+                                onClick={resetLeftPanel}
+                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                                title="リセット"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+                            <p className="text-sm font-bold text-slate-600 text-center mb-4">正面から見た様子</p>
+                            <div className="flex-1 flex items-center justify-center relative py-12">
+                                <div className="relative w-[300px] h-[300px]">
+
+                                    {/* Mirror Toggle */}
+                                    <div className="absolute top-[50px] left-[270px]">
+                                        <button
+                                            onClick={() => setShowMirrors(!showMirrors)}
+                                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border whitespace-nowrap ${showMirrors ? 'bg-slate-100 border-slate-400 text-slate-700' : 'bg-white border-slate-200 text-slate-500'}`}
+                                        >
+                                            鏡を表示
+                                        </button>
+                                    </div>
+
+                                    {/* Light Toggles */}
+                                    <div className="absolute top-[25px] -left-[60px] flex flex-col gap-2">
+                                        <button
+                                            onClick={() => setShowStarLight(!showStarLight)}
+                                            disabled={!showMirrors}
+                                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all border ${showStarLight ? 'bg-yellow-100 border-yellow-400 text-yellow-700' : 'bg-white border-slate-200 text-slate-500'} ${!showMirrors ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            星の光
+                                        </button>
+                                        <button
+                                            onClick={() => setShowTreeLight(!showTreeLight)}
+                                            disabled={!showMirrors}
+                                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all border ${showTreeLight ? 'bg-green-100 border-green-400 text-green-700' : 'bg-white border-slate-200 text-slate-500'} ${!showMirrors ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            木の光
+                                        </button>
+                                    </div>
+
+                                    {/* Cylinder (Inverted L-shape) */}
+                                    <svg width="100%" height="100%" viewBox="0 0 300 300" className="absolute top-0 left-0 pointer-events-none">
+                                        {/* Walls */}
+                                        <path d="M 100,20 L 260,20 L 260,280 L 180,280 L 180,100 L 100,100" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-400" />
+                                        {/* Opening (Left) */}
+                                        <line x1="100" y1="20" x2="100" y2="100" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
+
+                                        {/* Opening (Front-Bottom) */}
+                                        <line x1="180" y1="200" x2="260" y2="200" stroke="currentColor" strokeWidth="1" className="text-slate-400" />
+
+                                        {/* Mirror 2 (Bottom Right) - Trapezoid */}
+                                        {/* Placed before Light Rays so rays appear on top */}
+                                        {showMirrors && (
+                                            <polygon points="194,220 246,220 252,270 188,270" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
+                                        )}
+
+                                        {/* Light Rays */}
+                                        {showStarLight && calculateRayPath(40, '#facc15')}
+                                        {showTreeLight && calculateRayPath(80, '#16a34a')}
+
+                                        {/* Mirror 1 (Top Right Corner) - Back Slash */}
+                                        {showMirrors && (
+                                            <line x1="190" y1="30" x2="250" y2="90" stroke="#64748b" strokeWidth="4" />
+                                        )}
+                                    </svg>
+
+                                    {/* Object (Tree Card) at Left Opening */}
+                                    <div className="absolute top-[25px] left-[20px] w-[70px] h-[80px] border-2 border-slate-300 bg-white rounded-md flex flex-col items-center justify-center shadow-sm">
+                                        <div className="relative">
+                                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
+                                            <TreePine className="w-12 h-12 text-green-600" />
+                                        </div>
+                                    </div>
+
+                                    {/* Show Image Toggle at Bottom Exit */}
+                                    <div className="absolute top-[230px] left-[270px] flex flex-col gap-2">
+                                        <button
+                                            onClick={() => setShowBottomImage(!showBottomImage)}
+                                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border whitespace-nowrap ${showBottomImage ? 'bg-green-100 border-green-400 text-green-700' : 'bg-white border-slate-200 text-slate-500'}`}
+                                        >
+                                            像を表示
+                                        </button>
+                                    </div>
+
+                                    {/* Image (Visible if toggled) */}
+                                    {showBottomImage && (
+                                        <div className="absolute top-[205px] left-[185px] w-[70px] h-[80px] flex flex-col items-center justify-center z-10 pointer-events-none">
+                                            <div className="relative -rotate-90">
+                                                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
+                                                <TreePine className="w-12 h-12 text-green-600" />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Panel: Right View (Problem 3) */}
+                        <div className="flex-1 p-6 flex flex-col bg-white rounded-b-xl md:rounded-r-xl md:rounded-bl-none relative">
+                            <button
+                                onClick={resetRightPanel}
+                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                                title="リセット"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+                            <p className="text-sm font-bold text-slate-600 text-center mb-4">正面から見た様子</p>
+                            <div className="flex-1 flex items-center justify-center relative py-12">
+                                <div className="relative w-[300px] h-[300px]">
+
+                                    {/* Mirror Toggle (Left Side) */}
+                                    <div className="absolute top-[50px] -left-[60px]">
+                                        <button
+                                            onClick={() => setShowRightMirrors(!showRightMirrors)}
+                                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border whitespace-nowrap ${showRightMirrors ? 'bg-slate-100 border-slate-400 text-slate-700' : 'bg-white border-slate-200 text-slate-500'}`}
+                                        >
+                                            鏡を表示
+                                        </button>
+                                    </div>
+
+                                    {/* Light Toggles (Right Side) */}
+                                    <div className="absolute top-[25px] -right-[60px] flex flex-col gap-2">
+                                        <button
+                                            onClick={() => setShowRightStarLight(!showRightStarLight)}
+                                            disabled={!showRightMirrors}
+                                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all border ${showRightStarLight ? 'bg-yellow-100 border-yellow-400 text-yellow-700' : 'bg-white border-slate-200 text-slate-500'} ${!showRightMirrors ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            星の光
+                                        </button>
+                                        <button
+                                            onClick={() => setShowRightTreeLight(!showRightTreeLight)}
+                                            disabled={!showRightMirrors}
+                                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all border ${showRightTreeLight ? 'bg-green-100 border-green-400 text-green-700' : 'bg-white border-slate-200 text-slate-500'} ${!showRightMirrors ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            木の光
+                                        </button>
+                                    </div>
+
+                                    {/* Cylinder (Inverted L-shape, Mirrored) */}
+                                    <svg width="100%" height="100%" viewBox="0 0 300 300" className="absolute top-0 left-0 pointer-events-none">
+                                        {/* Walls */}
+                                        <path d="M 200,20 L 40,20 L 40,280 L 120,280 L 120,100 L 200,100" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-400" />
+                                        {/* Opening (Right) */}
+                                        <line x1="200" y1="20" x2="200" y2="100" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-slate-300" />
+
+                                        {/* Opening (Front-Bottom) */}
+                                        <line x1="40" y1="200" x2="120" y2="200" stroke="currentColor" strokeWidth="1" className="text-slate-400" />
+
+                                        {/* Mirror 2 (Bottom Left) - Trapezoid */}
+                                        {showRightMirrors && (
+                                            <polygon points="54,220 106,220 112,270 48,270" fill="#f1f5f9" stroke="#64748b" strokeWidth="4" />
+                                        )}
+
+                                        {/* Light Rays */}
+                                        {showRightStarLight && calculateRayPath(40, '#facc15', true)}
+                                        {showRightTreeLight && calculateRayPath(80, '#16a34a', true)}
+
+                                        {/* Mirror 1 (Top Left Corner) - Slash */}
+                                        {showRightMirrors && (
+                                            <line x1="50" y1="90" x2="110" y2="30" stroke="#64748b" strokeWidth="4" />
+                                        )}
+                                    </svg>
+
+                                    {/* Object (Tree Card) at Right Opening */}
+                                    <div className="absolute top-[25px] right-[20px] w-[70px] h-[80px] border-2 border-slate-300 bg-white rounded-md flex flex-col items-center justify-center shadow-sm">
+                                        <div className="relative">
+                                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
+                                            <TreePine className="w-12 h-12 text-green-600" />
+                                        </div>
+                                    </div>
+
+                                    {/* Show Image Toggle at Bottom Exit (Left Side) */}
+                                    <div className="absolute top-[230px] -left-[60px] flex flex-col gap-2">
+                                        <button
+                                            onClick={() => setShowRightImage(!showRightImage)}
+                                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border whitespace-nowrap ${showRightImage ? 'bg-green-100 border-green-400 text-green-700' : 'bg-white border-slate-200 text-slate-500'}`}
+                                        >
+                                            像を表示
+                                        </button>
+                                    </div>
+
+                                    {/* Image (Visible if toggled) */}
+                                    {showRightImage && (
+                                        <div className="absolute top-[205px] left-[45px] w-[70px] h-[80px] flex flex-col items-center justify-center z-10 pointer-events-none">
+                                            <div className="relative rotate-90">
+                                                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 absolute -top-1 left-1/2 -translate-x-1/2" />
+                                                <TreePine className="w-12 h-12 text-green-600" />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     /* Placeholder for other problems */
