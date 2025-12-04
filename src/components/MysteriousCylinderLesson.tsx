@@ -261,6 +261,8 @@ export const MysteriousCylinderLesson: React.FC<MysteriousCylinderLessonProps> =
                 // CORRECT LOGIC based on previous context:
                 // If bottomMirror is slash (/), and coming down:
                 // Reflects LEFT.
+                // y = -x + 460
+                nextY = 460 - currentX;
                 hitBottomMirror = true;
                 bottomNextDirX = -1;
                 bottomNextDirY = 0;
